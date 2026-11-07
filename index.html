@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0d12"><title>HEXAGON Search</title>
+<style>
+:root{--bg:#0b0d12;--panel:#121722;--panel2:#181f2c;--line:#293244;--txt:#f2f5fb;--muted:#929daf;--purple:#9282ff;--mint:#5bdac8}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -25%,#28224c,transparent 48%),var(--bg);color:var(--txt);font:15px/1.55 Inter,system-ui,Arial,sans-serif;min-height:100vh}
+header{height:66px;border-bottom:1px solid #ffffff10;display:flex;align-items:center;justify-content:space-between;padding:0 max(4vw,20px)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:2px}.logo{width:28px;height:28px;background:linear-gradient(135deg,var(--purple),var(--mint));clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);position:relative}.logo:after{content:"";position:absolute;inset:5px;background:var(--bg);clip-path:inherit}
+.header-note{font-size:12px;color:var(--muted)}main{width:min(900px,92vw);margin:auto;padding:70px 0 55px}.hero{text-align:center;margin-bottom:30px}.eyebrow{font-size:10px;letter-spacing:3px;color:var(--mint);font-weight:800}.hero h1{font-size:clamp(42px,8vw,66px);letter-spacing:-2.8px;line-height:1.08;margin:13px 0}.hero h1 span{background:linear-gradient(90deg,#b2a8ff,#65e3d1);background-clip:text;color:transparent}.hero p{color:var(--muted);margin:0}
+.search{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid #394157;border-radius:17px;padding:7px;box-shadow:0 18px 60px #0007}.search:focus-within{border-color:var(--purple);box-shadow:0 0 0 4px #9282ff20}.search .glass{padding-left:12px;color:var(--muted);font-size:21px}.search input{min-width:0;flex:1;background:none;border:0;outline:0;color:var(--txt);font:inherit;font-size:16px;padding:12px 2px}.search input::placeholder{color:#6f7a8e}.search button{border:0;border-radius:11px;padding:12px 19px;background:linear-gradient(120deg,#8e7cff,#609ef5);color:white;font-weight:750;cursor:pointer}.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0 30px}.tab{background:#121722;border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:99px;cursor:pointer;font:inherit;font-size:13px}.tab.active,.tab:hover{color:#e5e0ff;background:#26213f;border-color:#7263c7}
+#status{color:var(--muted);font-size:13px;margin:15px 3px;min-height:22px}.results{display:grid;gap:13px}.result{background:linear-gradient(145deg,#151b27,#111620);border:1px solid var(--line);border-radius:15px;padding:17px 18px;overflow:hidden}.result:hover{border-color:#655bb0}.result a.title{color:#b7adff;text-decoration:none;font-size:17px;font-weight:650;line-height:1.35}.result a.title:hover{text-decoration:underline}.url{color:var(--mint);font-size:11px;margin:6px 0 5px;overflow-wrap:anywhere}.result p{color:#b5bfce;margin:0;font-size:13px}.result img{max-width:100%;max-height:210px;object-fit:cover;border-radius:10px;margin-top:12px}.result .meta{color:#738097;font-size:11px;margin-top:9px}.empty{text-align:center;color:var(--muted);padding:40px 10px;border:1px dashed var(--line);border-radius:15px}.quick{margin-top:36px}.quick h3{font-size:10px;letter-spacing:2px;color:#758197}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{background:var(--panel);border:1px solid var(--line);color:#aab4c4;border-radius:99px;padding:8px 13px;cursor:pointer;font-size:12px}.chip:hover{border-color:var(--purple);color:white}footer{border-top:1px solid #ffffff10;padding:20px 5vw;color:#687386;font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+@media(max-width:560px){main{padding-top:55px}.header-note{display:none}.search button{padding:11px 13px}.search input{font-size:14px}.tab{padding:8px 12px}}
+</style></head>
+<body>
+<header><div class="brand"><div class="logo"></div> HEXAGON</div><div class="header-note">ПОИСК ПО ВСЕМУ ИНТЕРНЕТУ</div></header>
+<main>
+<section class="hero"><div class="eyebrow">ВАШ ПОИСКОВЫЙ ПРОСТРАНСТВО</div><h1>Ищи <span>шире.</span></h1><p>Результаты из интернета прямо здесь.</p></section>
+<form class="search" id="form"><span class="glass">⌕</span><input id="q" placeholder="Введите запрос..." autocomplete="off" required><button>Найти ↗</button></form>
+<nav class="tabs"><button class="tab active" data-cat="general">Все</button><button class="tab" data-cat="images">Картинки</button><button class="tab" data-cat="videos">Видео</button><button class="tab" data-cat="news">Новости</button></nav>
+<div id="status"></div><section class="results" id="results"></section>
+<section class="quick"><h3>ПОПУЛЯРНЫЕ ТЕМЫ</h3><div class="chips"><button class="chip">Искусственный интеллект</button><button class="chip">Технологии</button><button class="chip">Игры</button><button class="chip">Наука</button><button class="chip">Космос</button></div></section>
+</main><footer><span>© 2026 HEXAGON Search</span><span>Результаты предоставляются поисковыми источниками</span></footer>
+<script>
+const form=document.querySelector('#form'),q=document.querySelector('#q'),statusEl=document.querySelector('#status'),results=document.querySelector('#results');
+let category='general',lastQuery='';
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelector('.tab.active').classList.remove('active');b.classList.add('active');category=b.dataset.cat;if(lastQuery)runSearch(lastQuery)}));
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{q.value=b.textContent;runSearch(q.value)}));
+form.addEventListener('submit',e=>{e.preventDefault();runSearch(q.value)});
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function runSearch(query){
+ query=query.trim();if(!query)return;lastQuery=query;history.replaceState(null,'','#q='+encodeURIComponent(query));
+ statusEl.textContent='Ищем в интернете…';results.innerHTML='';
+ try{
+  const r=await fetch(`/api/search?q=${encodeURIComponent(query)}&category=${category}`);
+  const data=await r.json();if(!r.ok)throw new Error(data.error||'Ошибка поискового сервиса');
+  const items=data.results||[];
+  statusEl.textContent=`Найдено результатов: ${items.length}${data.source?' · Источник: '+data.source:''}`;
+  if(!items.length){results.innerHTML='<div class="empty">По этому запросу ничего не найдено. Попробуйте изменить формулировку.</div>';return}
+  results.innerHTML=items.map(x=>{
+   const href=/^https?:\/\//i.test(x.url||'')?x.url:'#';
+   const image=x.img_src||x.thumbnail||'';
+   return `<article class="result">${image?`<a href="${esc(href)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(image)}" alt=""></a>`:''}<a class="title" href="${esc(href)}" target="_blank" rel="noopener">${esc(x.title||'Без названия')}</a><div class="url">${esc(x.pretty_url||x.url||'')}</div><p>${esc(x.content||x.description||'')}</p>${x.publishedDate?`<div class="meta">${esc(x.publishedDate)}</div>`:''}</article>`;
+  }).join('');
+ }catch(err){statusEl.textContent='Не удалось получить результаты.';results.innerHTML=`<div class="empty">${esc(err.message)}<br><br>Проверьте подключение к интернету и запущен ли сервер HEXAGON.</div>`}
+}
+const hash=new URLSearchParams(location.hash.slice(1)).get('q');if(hash){q.value=hash;runSearch(hash)}
+</script></body></html>

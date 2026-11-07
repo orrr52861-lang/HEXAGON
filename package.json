@@ -1,0 +1,12 @@
+{
+  "name": "hexagon-search",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HEXAGON Search frontend and server-side SearXNG proxy",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
