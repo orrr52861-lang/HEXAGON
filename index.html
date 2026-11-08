@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0b0d12">
-<title>HEXAGON Search</title>
+<title>HEXAGON — поиск информации</title>
 <style>
 :root{--bg:#0b0d12;--panel:#121722;--line:#293244;--txt:#f2f5fb;--muted:#929daf;--purple:#9282ff;--mint:#5bdac8}
 *{box-sizing:border-box}
-body{margin:0;background:radial-gradient(ellipse at 50% -25%,#28224c,transparent 48%),var(--bg);color:var(--txt);font:15px/1.55 Inter,system-ui,Arial,sans-serif;min-height:100vh}
+body{margin:0;background:radial-gradient(ellipse at 50% -25%,#28224c,transparent 48%),var(--bg);color:var(--txt);font:15px/1.6 Inter,system-ui,Arial,sans-serif;min-height:100vh}
 header{height:66px;border-bottom:1px solid #ffffff10;display:flex;align-items:center;justify-content:space-between;padding:0 max(4vw,20px)}
 .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:2px}
 .logo{width:28px;height:28px;background:linear-gradient(135deg,var(--purple),var(--mint));clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);position:relative}
@@ -26,123 +26,98 @@ main{width:min(900px,92vw);margin:auto;padding:70px 0 55px}
 .search input{min-width:0;flex:1;background:none;border:0;outline:0;color:var(--txt);font:inherit;font-size:16px;padding:12px 2px}
 .search input::placeholder{color:#6f7a8e}
 .search button{border:0;border-radius:11px;padding:12px 19px;background:linear-gradient(120deg,#8e7cff,#609ef5);color:white;font-weight:750;cursor:pointer}
-.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin:20px 0 30px}
-.tab{background:#121722;border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:99px;cursor:pointer;font:inherit;font-size:13px}
-.tab.active,.tab:hover{color:#e5e0ff;background:#26213f;border-color:#7263c7}
-#status{color:var(--muted);font-size:13px;margin:15px 3px;min-height:22px}
-.results{display:grid;gap:13px}
-.result{background:linear-gradient(145deg,#151b27,#111620);border:1px solid var(--line);border-radius:15px;padding:17px 18px;overflow:hidden}
-.result:hover{border-color:#655bb0}
-.result a.title{color:#b7adff;text-decoration:none;font-size:17px;font-weight:650;line-height:1.35}
-.result a.title:hover{text-decoration:underline}
-.url{color:var(--mint);font-size:11px;margin:6px 0 5px;overflow-wrap:anywhere}
-.result p{color:#b5bfce;margin:0;font-size:13px}
-.result img{max-width:100%;max-height:210px;object-fit:cover;border-radius:10px;margin-top:12px}
-.result .meta{color:#738097;font-size:11px;margin-top:9px}
-.empty{text-align:center;color:var(--muted);padding:40px 10px;border:1px dashed var(--line);border-radius:15px}
+#status{color:var(--muted);font-size:13px;margin:22px 3px 12px;min-height:22px}
+.answer{background:linear-gradient(145deg,#151b27,#111620);border:1px solid var(--line);border-radius:17px;padding:23px 25px;box-shadow:0 18px 50px #0003}
+.answer-head{display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.answer-icon{width:32px;height:32px;border-radius:10px;background:#292342;color:#b9afff;display:grid;place-items:center;font-size:18px}
+.answer h2{font-size:18px;margin:0}
+.answer-copy{font-size:15px;line-height:1.8;color:#d4dbea;white-space:pre-line}
+.answer-note{font-size:12px;color:#8290a5;border-top:1px solid #ffffff12;margin-top:18px;padding-top:12px}
+.sources{margin-top:16px;border:1px solid var(--line);border-radius:14px;background:#10151f;overflow:hidden}
+.sources summary{cursor:pointer;padding:14px 17px;color:#b9c4d5;font-size:13px;font-weight:650;list-style:none}
+.sources summary::-webkit-details-marker{display:none}
+.sources summary:after{content:"＋";float:right;color:var(--mint)}
+.sources[open] summary:after{content:"−"}
+.source-list{padding:0 17px 14px;display:grid;gap:10px}
+.source{padding-top:10px;border-top:1px solid #ffffff10}
+.source a{color:#b7adff;text-decoration:none;font-weight:650;font-size:13px}
+.source a:hover{text-decoration:underline}
+.source small{display:block;color:var(--mint);font-size:11px;margin-top:2px}
+.source p{font-size:12px;color:#9ca9bc;margin:5px 0 0}
+.empty{text-align:center;color:var(--muted);padding:35px 15px;border:1px dashed var(--line);border-radius:15px}
 .quick{margin-top:36px}
 .quick h3{font-size:10px;letter-spacing:2px;color:#758197}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{background:var(--panel);border:1px solid var(--line);color:#aab4c4;border-radius:99px;padding:8px 13px;cursor:pointer;font-size:12px}
 .chip:hover{border-color:var(--purple);color:white}
 footer{border-top:1px solid #ffffff10;padding:20px 5vw;color:#687386;font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-@media(max-width:560px){main{padding-top:55px}.header-note{display:none}.search button{padding:11px 13px}.search input{font-size:14px}.tab{padding:8px 12px}}
+@media(max-width:560px){main{padding-top:52px}.header-note{display:none}.search button{padding:11px 13px}.search input{font-size:14px}.answer{padding:18px}}
 </style>
 </head>
 <body>
-<header><div class="brand"><div class="logo"></div> HEXAGON</div><div class="header-note">ПОИСК ПО ВСЕМУ ИНТЕРНЕТУ</div></header>
+<header><div class="brand"><div class="logo"></div> HEXAGON</div><div class="header-note">ПОИСК ИНФОРМАЦИИ ИЗ ИНТЕРНЕТА</div></header>
 <main>
-<section class="hero"><div class="eyebrow">ВАШЕ ПОИСКОВОЕ ПРОСТРАНСТВО</div><h1>Ищи <span>шире.</span></h1><p>Результаты из интернета прямо здесь.</p></section>
-<form class="search" id="form"><span class="glass">⌕</span><input id="q" placeholder="Введите запрос..." autocomplete="off" required><button type="submit">Найти ↗</button></form>
-<nav class="tabs">
-<button type="button" class="tab active" data-cat="general">Все</button>
-<button type="button" class="tab" data-cat="images">Картинки</button>
-<button type="button" class="tab" data-cat="videos">Видео</button>
-<button type="button" class="tab" data-cat="news">Новости</button>
-</nav>
-<div id="status"></div><section class="results" id="results"></section>
+<section class="hero"><div class="eyebrow">ВАШЕ ПОИСКОВОЕ ПРОСТРАНСТВО</div><h1>Ищи <span>шире.</span></h1><p>Ищем материалы в интернете и собираем главное здесь.</p></section>
+<form class="search" id="form"><span class="glass">⌕</span><input id="q" placeholder="Что хотите узнать?" autocomplete="off" required><button type="submit">Найти ↗</button></form>
+<div id="status"></div>
+<section id="results"></section>
 <section class="quick"><h3>ПОПУЛЯРНЫЕ ТЕМЫ</h3><div class="chips">
 <button type="button" class="chip">Искусственный интеллект</button><button type="button" class="chip">Технологии</button><button type="button" class="chip">Игры</button><button type="button" class="chip">Наука</button><button type="button" class="chip">Космос</button>
 </div></section>
 </main>
-<footer><span>© 2026 HEXAGON Search</span><span>Результаты предоставляются поисковыми источниками</span></footer>
+<footer><span>© 2026 HEXAGON Search</span><span>Информация собирается из открытых интернет-источников</span></footer>
 <script>
 const form=document.querySelector('#form');
 const q=document.querySelector('#q');
 const statusEl=document.querySelector('#status');
 const results=document.querySelector('#results');
-let category='general',lastQuery='',requestNumber=0;
+let requestNumber=0;
 
-document.querySelectorAll('.tab').forEach(button=>{
-  button.addEventListener('click',()=>{
-    document.querySelector('.tab.active')?.classList.remove('active');
-    button.classList.add('active');
-    category=button.dataset.cat;
-    if(lastQuery) runSearch(lastQuery);
-  });
-});
 document.querySelectorAll('.chip').forEach(button=>{
-  button.addEventListener('click',()=>{
-    q.value=button.textContent.trim();
-    runSearch(q.value);
-  });
+  button.addEventListener('click',()=>{q.value=button.textContent.trim();runSearch(q.value);});
 });
-form.addEventListener('submit',event=>{
-  event.preventDefault();
-  runSearch(q.value);
-});
+form.addEventListener('submit',event=>{event.preventDefault();runSearch(q.value);});
 
 function esc(value=''){
-  return String(value).replace(/[&<>"']/g,char=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[char]));
+  return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 }
 function safeUrl(value){
-  try{
-    const url=new URL(value);
-    return ['http:','https:'].includes(url.protocol)?url.href:'#';
-  }catch{return '#';}
+  try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)?url.href:'#';}
+  catch{return '#';}
 }
 async function runSearch(query){
   query=query.trim();
   if(!query)return;
-  lastQuery=query;
-  const currentRequest=++requestNumber;
+  const current=++requestNumber;
   history.replaceState(null,'','#q='+encodeURIComponent(query));
-  statusEl.textContent='Ищем в интернете…';
-  results.innerHTML='';
+  statusEl.textContent='Ищем страницы и собираем информацию…';
+  results.innerHTML='<div class="empty">HEXAGON читает доступные источники. Это может занять несколько секунд.</div>';
   try{
-    const response=await fetch(`/api/search?q=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`);
+    const response=await fetch(`/api/search?q=${encodeURIComponent(query)}`);
     let data;
-    try{data=await response.json()}catch{throw new Error('Сервер вернул некорректный ответ')}
+    try{data=await response.json();}catch{throw new Error('Сервер вернул некорректный ответ.');}
     if(!response.ok)throw new Error(data.error||`Ошибка сервера: HTTP ${response.status}`);
-    if(currentRequest!==requestNumber)return;
-    const items=Array.isArray(data.results)?data.results:[];
-    statusEl.textContent=`Найдено результатов: ${items.length}${data.source?' · Источник: '+data.source:''}`;
-    if(!items.length){
-      results.innerHTML='<div class="empty">По этому запросу ничего не найдено. Попробуйте изменить формулировку.</div>';
-      return;
-    }
-    results.innerHTML=items.map(item=>{
-      const href=safeUrl(item.url||'');
-      const image=safeUrl(item.img_src||item.thumbnail||'');
-      const imageHtml=image!=='#'?`<a href="${esc(href)}" rel="noopener"><img loading="lazy" src="${esc(image)}" alt=""></a>`:'';
-      return `<article class="result">
-        ${imageHtml}
-        <a class="title" href="${esc(href)}" rel="noopener">${esc(item.title||'Без названия')}</a>
-        <div class="url">${esc(item.pretty_url||item.url||'')}</div>
-        <p>${esc(item.content||item.description||'')}</p>
-        ${item.publishedDate?`<div class="meta">${esc(item.publishedDate)}</div>`:''}
-      </article>`;
-    }).join('');
+    if(current!==requestNumber)return;
+    statusEl.textContent=`Проверено источников: ${data.sourceCount||0} · Получено полных страниц: ${data.extractedCount||0}`;
+    const sources=Array.isArray(data.sources)?data.sources:[];
+    const sourceMarkup=sources.length?`<details class="sources"><summary>Источники (${sources.length})</summary><div class="source-list">${sources.map(item=>{
+      const href=safeUrl(item.url);
+      return `<article class="source"><a href="${esc(href)}">${esc(item.title||item.host||'Источник')}</a><small>${esc(item.host||'')}</small>${item.excerpt?`<p>${esc(item.excerpt)}</p>`:''}</article>`;
+    }).join('')}</div></details>`:'';
+    results.innerHTML=`<article class="answer">
+      <div class="answer-head"><div class="answer-icon">✦</div><h2>Найденная информация</h2></div>
+      <div class="answer-copy">${esc(data.answer||'Информация не найдена.')}</div>
+      ${data.note?`<div class="answer-note">${esc(data.note)}</div>`:''}
+    </article>${sourceMarkup}`;
   }catch(error){
-    if(currentRequest!==requestNumber)return;
-    statusEl.textContent='Не удалось получить результаты.';
-    results.innerHTML=`<div class="empty">${esc(error.message)}<br><br>Проверьте сервер HEXAGON на Render.</div>`;
+    if(current!==requestNumber)return;
+    statusEl.textContent='Не удалось получить информацию.';
+    results.innerHTML=`<div class="empty">${esc(error.message)}<br><br>Проверьте, что сервер HEXAGON запущен на Render.</div>`;
   }
 }
 const initialQuery=new URLSearchParams(location.hash.slice(1)).get('q');
-if(initialQuery){q.value=initialQuery;runSearch(initialQuery)}
+if(initialQuery){q.value=initialQuery;runSearch(initialQuery);}
 </script>
 </body>
 </html>
+
