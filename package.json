@@ -2,7 +2,7 @@
   "name": "hexagon-search",
   "version": "1.0.0",
   "private": true,
-  "description": "HEXAGON Search frontend and server-side SearXNG proxy",
+  "description": "HEXAGON web search with extracted information and source list",
   "scripts": {
     "start": "node server.js"
   },
